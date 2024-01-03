@@ -36,7 +36,7 @@ class ConfirmationEmail(UnimportanceEmail):
                 score += 0.1
 
         # Indicator: sent from a "no-reply" or "noreply" address
-        if "no-reply" in email.sender or "noreply" in email.sender:
+        if "no-reply" in email.sender.email or "noreply" in email.sender.email:
             score += 0.2
 
         return score

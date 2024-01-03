@@ -4,6 +4,7 @@ import os
 from email.header import decode_header
 
 from .Email import Email
+from .Sender import Sender
 
 # Email account credentials
 IMAP_SERVER = os.environ.get("IMAP_SERVER")
@@ -39,11 +40,13 @@ class EmailManager:
 
         # Extract email information
         subject = str(decode_header(msg["Subject"])[0][0])
-        sender = str(decode_header(msg["From"])[0][0])
+        sender = Sender.from_string(str(decode_header(msg["From"])[0][0]))
         date = str(decode_header(msg["Date"])[0][0])
-        body = msg.get_payload()
-        if not isinstance(body, str):
-            body = body[0].as_string()
+        # Extract email body
+        if msg.is_multipart():
+            msg = next(part for part in msg.walk() if part.get_content_type() == "text/plain")
+
+        body = msg.get_payload(decode=True).decode("ISO-8859-1")
 
         return Email(
             id=message_id,
