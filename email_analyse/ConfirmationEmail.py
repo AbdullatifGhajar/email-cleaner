@@ -12,7 +12,7 @@ class ConfirmationEmail(UnimportanceEmail):
     def check(self, email: Email) -> float:
         score = 0.0
 
-        # Indicator: includes the some confirmation words
+        # Indicator: includes confirmation words
         confirmation_keywords = [
             "confirmation",
             "confirm",
