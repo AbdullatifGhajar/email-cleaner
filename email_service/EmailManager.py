@@ -38,10 +38,12 @@ class EmailManager:
         msg = email.message_from_bytes(raw_email)
 
         # Extract email information
-        subject, encoding = decode_header(msg["Subject"])[0]
-        sender, encoding = decode_header(msg["From"])[0]
-        date, encoding = decode_header(msg["Date"])[0]
-        body = msg.get_payload()[0].as_string()
+        subject = str(decode_header(msg["Subject"])[0][0])
+        sender = str(decode_header(msg["From"])[0][0])
+        date = str(decode_header(msg["Date"])[0][0])
+        body = msg.get_payload()
+        if not isinstance(body, str):
+            body = body[0].as_string()
 
         return Email(
             id=message_id,
